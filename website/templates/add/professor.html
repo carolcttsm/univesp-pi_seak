@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Professor{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Cadastrar Novo Professor</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin.cadastrar_professor') }}">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.nome.label }}<br>
+            {{ form.nome(size=40) }}
+            {% for error in form.nome.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit(class="button") }}</p>
+    </form>
+</div>
+{% endblock %}

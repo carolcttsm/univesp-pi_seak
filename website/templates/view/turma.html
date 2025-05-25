@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Turma {{ turma.id }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Detalhes da Turma {{ turma.id }}</h2>
+    <p><strong>Professor:</strong> {{ turma.professor.nome }}</p>
+    <p><strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }}</p>
+    <p><strong>Vagas:</strong> {{ turma.oficina.vagas }}</p>
+    <p><strong>Vagas Ocupadas:</strong> {{ turma.oficina.vagas_ocupadas or 0 }}</p>
+    <p><strong>Descrição:</strong> {{ turma.oficina.descricao or 'Sem descrição' }}</p>
+
+    <hr>
+    <h3>Alunos Matriculados</h3>
+    <form method="POST">
+        <select name="alunos_matriculados" multiple class="form-control mb-2" size="6">
+            {% for aluno in alunos_matriculados %}
+                <option value="{{ aluno.id }}">{{ aluno.nome }} (ID {{ aluno.id }})</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="remover" class="btn btn-danger">Remover Selecionados</button>
+    </form>
+
+    <hr>
+    <h3>Adicionar Novos Alunos</h3>
+    <form method="POST">
+        <select name="alunos_disponiveis" multiple class="form-control mb-2" size="6">
+            {% for aluno in alunos_disponiveis %}
+                <option value="{{ aluno.id }}">{{ aluno.nome }} (ID {{ aluno.id }})</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="adicionar" class="btn btn-success">Adicionar Selecionados</button>
+    </form>
+
+    <a href="{{ url_for('admin.editar_turma', turma_id=turma.id) }}" class="btn btn-secondary mt-3">Editar Turma</a>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel Administrativo{% endblock %}
+
+{% block content %}
+<img src="{{ url_for('static', filename='Logo_SEAK.jpg') }}" alt="Logo SEAK" class="logo-seak">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Bem-vindo ao Painel Administrativo</h1>
+
+    <div class="alert alert-info text-center">
+        <p>
+            Olá, <strong>{{ current_user.nome_usuario }}</strong>!<br>
+            Até <strong>{{ data_hoje }}</strong>, nosso projeto acolhe
+            <strong>{{ total_alunos }}</strong> aluno(s),
+            com o oferecimento de <strong>{{ total_oficinas }}</strong> oficina(s),
+            divididas em <strong>{{ total_turmas }}</strong> turma(s)
+            e administradas por <strong>{{ total_professores }}</strong> professor(es).
+        </p>
+    </div>
+</div>
+{% endblock %}

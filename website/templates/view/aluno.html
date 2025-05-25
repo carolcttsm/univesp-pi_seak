@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Aluno{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Detalhes do Aluno {{ aluno.id }}</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} text-center">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="aluno-details-container">
+    <div class="foto-aluno">
+        {% if aluno.imagem %}
+            <img src="{{ url_for('static', filename='uploads/' + aluno.imagem) }}"
+                 alt="Foto do aluno" class="foto-aluno">
+        {% else %}
+            <div class="foto-aluno foto-aluno-placeholder">Sem foto</div>
+        {% endif %}
+
+        <a href="{{ url_for('admin.editar_aluno', aluno_id=aluno.id) }}" class="foto-aluno foto-button">
+            Editar Cadastro
+        </a>
+    </div>
+
+    <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+    <p><strong>Nome da Mãe:</strong> {{ aluno.nomemae }}</p>
+    <p><strong>Nome do Pai:</strong> {{ aluno.nomepai }}</p>
+    <p><strong>Responsável:</strong> {{ aluno.nomeresp }}</p>
+    <p><strong>Sexo:</strong> {{ aluno.sexo }}</p>
+    <p><strong>Endereço:</strong> {{ aluno.endereco }}</p>
+    <p><strong>CEP:</strong> {{ aluno.cep }}</p>
+    <p><strong>RG:</strong> {{ aluno.rg }}</p>
+    <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+    <p><strong>Data de Nascimento:</strong> {{ aluno.dtnasc.strftime('%d/%m/%Y') if aluno.dtnasc else '' }}</p>
+    <p><strong>CPF da Mãe:</strong> {{ aluno.cpfmae }}</p>
+    <p><strong>NIS do Aluno:</strong> {{ aluno.nisaluno }}</p>
+    <p><strong>NIS da Mãe:</strong> {{ aluno.nismae }}</p>
+  </div>
+
+  <div class="details-container">
+  <h3>Turmas</h2>
+  {% if turmas %}
+      <div class="sub-details-container">
+      {% for turma in turmas %}
+          <strong>Oficina:</strong> {{ turma.oficina.nome }} |
+          <strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }} |
+          <strong>Professor:</strong> {{ turma.professor.nome }}
+      {% if not loop.last %}<hr>{% endif %}
+      {% endfor %}
+  </div>
+  {% else %}
+    <div class="alert alert-info text-center">Nenhuma turma cadastrada.</div>
+  {% endif %}
+
+  <h3 class="info">Adicionar a novas turmas</h2>
+  <form method="POST" action="{{ url_for('admin.ver_aluno', aluno_id=aluno.id) }}">
+    <input type="hidden" name="aluno_id" value="{{ aluno.id }}">
+
+    <div class="mb-3">
+      <label for="turmas" class="form-label">Selecione uma ou mais turmas disponíveis</label>
+      <select name="turmas" id="turmas" class="form-control" multiple size="5">
+        {% for turma in turmas_disponiveis %}
+          <option value="{{ turma.id }}">
+            {{ turma.oficina.nome }} — {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary">Adicionar Aluno às Turmas Selecionadas</button>
+    </div>
+  </form>
+  </div>
+
+  <div class="details-container">
+  <h3>Presenças</h2>
+  {% if presencas_por_oficina %}
+      {% for oficina, datas in presencas_por_oficina.items() %}
+        <div class="oficina-box">
+          <h4 class="oficina-nome">{{ oficina }}</h4>
+          <p class="datas-presenca">
+            {% for data in datas %}
+              {{ data.strftime('%d/%m/%Y') }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+        </div>
+      {% endfor %}
+  {% else %}
+    <div class="alert alert-info text-center">Nenhuma presença registrada.</div>
+  {% endif %}
+
+  <h3 class="info">Registrar Presença</h3>
+  <form method="POST" action="{{ url_for('admin.ver_aluno', aluno_id=aluno.id) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      {{ form.oficina.label(class="form-label") }}
+      {{ form.oficina(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.data.label(class="form-label") }}
+      {{ form.data(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.presente.label }}<br>
+        {{ form.presente(class="form-check-control") }}
+    </div>
+
+    <div class="form-group text-center">
+      {{ form.submit(class="btn btn-success") }}
+    </div>
+  </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema SEAK{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}"><b>HOME</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Cadastrar
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('admin.cadastrar_admin') }}">Cadastrar Administrador</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('admin.cadastrar_aluno') }}">Cadastrar Aluno</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('admin.cadastrar_professor') }}">Cadastrar Professor</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('admin.criar_oficina') }}">Criar Oficina</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('admin.criar_turma') }}">Criar Turma</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Listar
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('list.listar_usuarios') }}">Listar Administradores</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('list.listar_alunos') }}">Listar Alunos</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('list.listar_professores') }}">Listar Professores</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('list.listar_oficinas') }}">Listar Oficinas</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Buscar
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('search.buscar_aluno') }}">Buscar Aluno</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('search.buscar_oficina') }}">Buscar Oficina</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('search.buscar_turma') }}">Buscar Turma</a></li>
+                        </ul>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link logout-button" href="{{ url_for('auth.logout') }}">Sair</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer id="footnote">
+        <li>Todos os Direitos Reservados - SEAK 2025</li>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

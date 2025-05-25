@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Listar Oficinas{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Lista de Oficinas</h2>
+       
+  {% if count != 0 %}
+    <h3 class="info">Total de oficinas cadastradas: {{ count }}</h3>
+
+    <form method="get" action="{{ url_for('list.listar_oficinas') }}">
+      <label for="ano_mes">Filtrar por mês</label>
+        <select name="ano_mes" id="ano_mes" onchange="this.form.submit()">
+          <option value="">-- Todos --</option>
+            {% for mes in meses_disponiveis %}
+              <option value="{{ mes }}" {% if mes == mes_selecionado %}selected{% endif %}>
+                {{ mes }}
+              </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if oficinas %}
+      {% for oficina in oficinas %}
+      <div class="details-container">
+        <h3>{{ oficina["nome"] }} ({{ oficina["vagas"] }} vagas) - Mês: {{ oficina["ano_mes"] }}</h3>
+
+        <p>{{ oficina["descricao"]}}</p>
+        
+        {% if oficina.turmas %}
+          {% for turma in oficina.turmas %}
+          <div class="sub-details-container">
+            <h4 class="info">Turma:</strong> {{ turma.id }}</h4>
+            <p><strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }} |
+            <strong>Professor:</strong> {{ turma.professor.nome }} |
+            <strong>Ocupadas:</strong> {{ turma.alunos | length }} |
+            <strong>Restantes:</strong> {{ oficina.vagas - turma.alunos | length }}</p>
+            {% if not loop.last %}<hr>{% endif %}
+
+            {% if current_user.is_authenticated %}
+              <button class="btn btn-primary mt-3"><a class="btn-link" href="{{ url_for('admin.ver_turma', turma_id=turma.id) }}">Ver</a></button>
+              <button class="btn btn-primary mt-3"><a class="btn-link" href="{{ url_for('admin.editar_turma', turma_id=turma.id) }}">Editar</a></button>
+              <form action="{{ url_for('admin.deletar_turma', turma_id=turma.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Tem certeza que deseja excluir esta turma?')">Excluir</button>
+              </form>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% else %}
+          <div class="alert alert-info text-center">Nenhuma turma cadastrada.</div>
+        {% endif %}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% else %}
+    <div class="alert alert-info text-center">Nenhuma oficina cadastrada.</div>
+  {% endif %}
+</div>
+{% endblock %}

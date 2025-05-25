@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Buscar Turma{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Buscar Turma</h2>
+
+    {% if count != 0 %}
+        <h3 class="info">Total de turmas cadastradas: {{ count }}</h3>
+
+        <form method="GET" action="{{ url_for('search.buscar_turma') }}">
+            <label for="identificador">ID</label>
+            <input type="text" id="identificador" name="identificador"
+                   value="{{ request.args.get('identificador', '') }}">
+
+            <label for="dia_semana">ou Dia da Semana</label>
+            <select id="dia_semana" name="dia_semana" class="form-control">
+                {% for dia in ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo'] %}
+                    <option value="{{ dia }}" {% if request.args.get('dia_semana') == dia %}selected{% endif %}>
+                        {{ dia|capitalize }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="hora">ou Hora</label>
+            <input type="text" id="hora" name="hora"
+                   value="{{ request.args.get('hora', '') }}"
+                   placeholder="Ex: 14:00">
+
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </form>
+
+        {% if busca_feita %}
+            {% if resultados %}
+            <br>
+                <div class="details-container">
+                    <h3 class="info">Resultados</h3>
+
+                    <div class="grid-turmas">
+                    {% for turma in resultados %}
+                        <div class="turma-box">
+                            <h4 class="info">Turma {{ turma.id }}</h4>
+                            <p><strong>Oficina:</strong> {{ turma.oficina.nome }}<br>
+                            <strong>Professor:</strong> {{ turma.professor.nome }}<br>
+                            <strong>Alunos:</strong> {{ turma.alunos|length }}<br>
+                            <strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }}</p>
+                            <a style="color:white" class="btn btn-primary btn-sm" href="{{ url_for('admin.ver_turma', turma_id=turma.id) }}">Ver</a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center mt-3">
+                    Nenhuma turma encontrada com o ID ou Horário fornecido.
+                </div>
+            {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center">Nenhuma turma cadastrada.</div>
+    {% endif %}
+</div>
+{% endblock %}

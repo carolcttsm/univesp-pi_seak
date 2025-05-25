@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Listar Professores{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Lista de Professores Cadastrados</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if professores %}
+    {% for professor in professores %}
+      <div class="details-container">
+        <h3 class="info">{{ professor.nome }}</h3>
+
+          <h4 class="info">Oficinas</h4>
+          {% if professor.oficinas %}
+          <div class="grid-oficinas"></div>
+              {% for oficina in professor.oficinas %}
+                <div class="oficina-box">
+                  <p><strong>{{ oficina.nome }}</strong> ({{ oficina.vagas }} vagas)</p>
+                  <a href="{{ url_for('admin.ver_oficina', oficina_id=oficina.id) }}"
+                     class="btn btn-primary btn-sm" style="color:white">Ver</a>
+                </div>
+              {% endfor %}
+          {% else %}
+            <div class="alert alert-info text-center">Nenhuma oficina atribuída.</div>
+          {% endif %}
+
+          <hr>
+
+          <h4 class="info">Turmas</h4>
+          {% if professor.turmas %}
+          <div class="grid-turmas">
+              {% for turma in professor.turmas %}
+                <div class="turma-box">
+                  <p><strong>ID:</strong> {{ turma.id }}<br>
+                  <strong>Oficina:</strong> {{ turma.oficina.nome }}<br>
+                  <strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }}</p>
+                  <a href="{{ url_for('admin.ver_turma', turma_id=turma.id) }}"
+                     class="btn btn-primary btn-sm" style="color:white">Ver</a>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="alert alert-info text-center">Nenhuma turma atribuída.</div>
+          {% endif %}
+        </div>
+
+        {% if current_user.is_authenticated %}
+          <form action="{{ url_for('admin.deletar_professor', professor_id=professor.id) }}"
+                method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este professor?');">
+            <button class="btn btn-danger mt-2" type="submit">Deletar</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="alert alert-info text-center">Nenhum professor cadastrado.</div>
+  {% endif %}
+</div>
+{% endblock %}

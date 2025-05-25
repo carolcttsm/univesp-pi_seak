@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Usuário{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Editar Usuário</h2>
+
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      {{ form.nome_usuario.label }}<br>
+      {{ form.nome_usuario(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.email.label }}<br>
+      {{ form.email(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.senha1.label }}<br>
+      {{ form.senha1(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.senha2.label }}<br>
+      {{ form.senha2(class="form-control") }}
+    </div>
+
+    <div class="form-group text-center">
+      {{ form.submit(class="btn btn-success") }}
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Turma{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-center mb-4">Cadastrar Nova Turma</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.oficina_id.label }}
+            {{ form.oficina_id() }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.professor_id.label }}
+            {{ form.professor_id() }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.dia_semana.label }}
+            {{ form.dia_semana(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.hora.label }}<br>
+            {{ form.hora(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.alunos.label }}
+            {{ form.alunos }}
+            {% for error in form.alunos.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="d-grid">
+            {{ form.submit(class="button") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

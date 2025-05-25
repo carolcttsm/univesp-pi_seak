@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Listar Administradores{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-center mb-4">Lista de Administradores</h2>
+
+    {% if count != 0 %}
+        <h3 class="info">Total de usuários cadastrados: {{ count }}</h3>
+
+        <ul>
+            {% for usuario in usuarios %}
+                <div class="details-container">
+                    <div class="list-title">{{ usuario.id }} — {{ usuario.nome_usuario }}{% if usuario.id == current_user.id %} <span style="font-size:1rem;color:gray;">(atual)</span>{% endif %}</div>
+
+                    {% if usuario.id != current_user.id %}
+                        <form action="{{ url_for('admin.deletar_usuario', usuario_id=usuario.id) }}"
+                              method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                Deletar
+                            </button>
+                        </form>
+                    {% else %}
+                        <button class="btn btn-primary mt-3"><a class="btn-link" href="{{ url_for('admin.editar_usuario', usuario_id=usuario.id) }}">Editar</a></button>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info text-center">Nenhum usuário administrador cadastrado.</div>
+    {% endif %}
+</div>
+{% endblock %}
+

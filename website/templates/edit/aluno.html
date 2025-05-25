@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Aluno{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Editar Aluno</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    {% for field in form %}
+      {% if field.type not in ['SubmitField', 'CSRFTokenField'] %}
+        <div class="form-group">
+          {{ field.label }}<br>
+          {{ field(class="form-control") }}
+          {% if field.errors %}
+            <ul class="text-danger">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="form-group text-center">
+      {{ form.submit(class="btn btn-success") }}
+    </div>
+  </form>
+
+  <form action="{{ url_for('admin.deletar_aluno', aluno_id=aluno.id) }}" method="POST"
+        onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
+    <button type="submit" class="btn btn-danger mt-3">Excluir Aluno</button>
+  </form>
+</div>
+{% endblock %}

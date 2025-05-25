@@ -1,0 +1,47 @@
+# Ambiente virtual
+venv/
+ENV/
+env/
+.venv/
+
+# Arquivos de configuração sensíveis
+.env
+
+# Arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Banco de dados local
+instance/
+*.sqlite3
+*.db
+
+# Arquivos temporários
+*.log
+*.pid
+*.swp
+*.bak
+*.tmp
+*.orig
+*.DS_Store
+Thumbs.db
+
+# Cache do VSCode e outros editores
+.vscode/
+.idea/
+*.code-workspace
+
+# Docker
+seak_postgres
+seak_data
+*.tar
+
+# Arquivos gerados por execução
+*.pyc
+*.pyo
+
+# Arquivos de build (caso use PyInstaller/Frozen apps)
+build/
+dist/
+*.spec

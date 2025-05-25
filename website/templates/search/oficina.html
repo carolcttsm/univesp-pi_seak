@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Buscar Oficina{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Buscar Oficina</h2>
+
+    {% if count != 0 %}
+        <h3 class="info">Total de oficinas cadastradas: {{ count }}</h3>
+
+        <form method="GET" action="{{ url_for('search.buscar_oficina') }}">
+            <label for="nome">Nome da Oficina</label>
+            <input type="text" id="nome" name="nome"
+                   value="{{ nome_busca or '' }}"
+                   placeholder="Ex: Pintura, Teatro...">
+            <button class="btn btn-primary btn-sm" type="submit">Buscar</button>
+        </form>
+
+        {% if busca_feita %}
+            {% if resultados %}
+                <br>
+                <h3 class="info">Resultados</h3>
+
+                {% for resultado in resultados %}
+                    <div class="sub-details-container">
+                        <h4 class="info">{{ resultado.nome }}</h4>
+                        <p><strong>Período:</strong> {{ resultado.ano_mes }}<br>
+                        <strong>Professor:</strong> {{ resultado.professor.nome }}<br>
+                        <strong>Descrição:</strong> {{ resultado.descricao }}</p>
+
+                        {% if resultado.turmas %}
+                            <div class="grid-turmas">
+                                {% for turma in resultado.turmas %}
+                                    <div class="turma-box">
+                                        <h5 class="info">Turma {{ turma.id }}</h5>
+                                        <p>
+                                            <strong>Professor:</strong> {{ turma.professor.nome }}<br>
+                                            <strong>Alunos:</strong> {{ turma.alunos|length }}/{{ resultado.vagas }}<br>
+                                            <strong>Horário:</strong> {{ turma.dia_semana|capitalize }} às {{ turma.hora.strftime('%H:%M') }}
+                                        </p>
+                                        <a class="btn btn-primary btn-sm" style="color:white"
+                                           href="{{ url_for('admin.ver_turma', turma_id=turma.id) }}">Ver</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info text-center">Nenhuma turma cadastrada para esta oficina.</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center mt-3">
+                    Nenhuma oficina encontrada com o nome fornecido.
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center">Nenhuma oficina cadastrada.</div>
+    {% endif %}
+</div>
+{% endblock %}

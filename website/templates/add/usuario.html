@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Usuário{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2 class="text-center mb-4">Cadastrar Novo Usuário (Admin)</h2>
+
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      {{ form.nome_usuario.label }}<br>
+      {{ form.nome_usuario(class="form-control", size=40) }}
+      {% for error in form.nome_usuario.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.email.label }}<br>
+      {{ form.email(class="form-control", size=40) }}
+      {% for error in form.email.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.senha1.label }}<br>
+      {{ form.senha1(class="form-control", size=40) }}
+      {% for error in form.senha1.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.senha2.label }}<br>
+      {{ form.senha2(class="form-control", size=40) }}
+      {% for error in form.senha2.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group text-center">
+      {{ form.submit(class="btn btn-success") }}
+    </div>
+  </form>
+</div>
+{% endblock %}

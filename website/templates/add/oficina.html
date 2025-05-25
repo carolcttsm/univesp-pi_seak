@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar Oficina{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-center mb-4">Criar Nova Oficina</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.nome.label(class="form-label") }}
+            {{ form.nome(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.descricao.label(class="form-label") }}
+            {{ form.descricao(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.vagas.label(class="form-label") }}
+            {{ form.vagas(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.mes_referencia.label(class="form-label") }}
+            {{ form.mes_referencia(class="form-control", placeholder="YYYY-MM") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.professor_id.label(class="form-label") }}
+            {{ form.professor_id(class="form-control") }}
+        </div>
+
+        <div class="d-grid">
+            {{ form.submit(class="btn btn-success") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

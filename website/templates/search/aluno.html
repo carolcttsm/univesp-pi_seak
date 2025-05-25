@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Buscar Aluno{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Buscar Aluno</h2>
+
+    {% if count != 0 %}
+        <h3 class="info">Total de alunos cadastrados: {{ count }}</h3>
+
+        <form method="GET" action="{{ url_for('search.buscar_aluno') }}">
+            <label for="identificador">ID</label>
+            <input type="text" id="identificador" name="identificador" value="{{ request.args.get('identificador', '') }}">
+
+            <label for="nome">ou Nome</label>
+            <input type="text" id="nome" name="nome" value="{{ request.args.get('nome', '') }}">
+
+            <button class="btn btn-primary mt-3" type="submit">Buscar</button>
+        </form>
+
+        {% if busca_feita %}
+        <br>
+            {% if resultados %}
+            <div class="details-container">
+                <h3 class="mt-4">Resultados:</h3>
+                    {% for aluno in resultados %}
+                        <p><strong>{{ aluno.nome }}</strong> (Número de registro: {{ aluno.id }})</p>
+                        <button class="btn btn-primary"><a class="btn-link" href="{{ url_for('admin.ver_aluno', aluno_id=aluno.id) }}">Ver</a></button>
+                        {% if not loop.last %}<hr>{% endif %}
+                    {% endfor %}
+            </div>
+            {% else %}
+                <div class="alert alert-info text-center mt-4">
+                    Nenhum aluno encontrado com o ID ou nome fornecido.
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center">Nenhum aluno cadastrado.</div>
+    {% endif %}
+</div>
+{% endblock %}
