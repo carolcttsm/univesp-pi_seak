@@ -44,3 +44,11 @@ def init_app(app):
             logging.info("[INIT] Usuário admin criado com sucesso.")
         else:
             logging.info("[INIT] Usuário admin já existe.")
+
+        # Popular banco se ambiente for demo
+        if os.getenv("FLASK_ENV") == "demo":
+            try:
+                from website.utils.seed import popular_banco_demo
+                popular_banco_demo()
+            except Exception as e:
+                logging.warning(f"[SEED] Falha ao popular banco demo: {e}")
